@@ -1,0 +1,13 @@
+﻿<Application x:Class="DemEkzDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DemEkzDemo"
+             xmlns:viewmodel="clr-namespace:DemEkzDemo.ViewModels"
+             xmlns:view="clr-namespace:DemEkzDemo.Views.Components"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:MainMenuViewModel}">
+            <view:MainMenu/>
+        </DataTemplate>
+    </Application.Resources>
+</Application>
