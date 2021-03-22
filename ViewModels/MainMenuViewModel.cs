@@ -257,7 +257,7 @@ namespace DemEkzDemo.ViewModels
         private void ReleaseAllClients()
         {
             Count = 0;
-            PerPage = Size;
+            PerPage = Size + 1;
             LoggedOut = PerPage;
             Connection();
             CheckLoggedOut();
