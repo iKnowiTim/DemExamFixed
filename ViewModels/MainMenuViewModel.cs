@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using DemEkzDemo.ModelDb;
@@ -22,8 +24,6 @@ namespace DemEkzDemo.ViewModels
             InitColors();
             Connection();
             InitCommands();
-
-            //ValueProperty = DependencyProperty.Register(nameof(GenderFilterIndex), typeof(int), typeof(MainMenuViewModel));
         }
        
         #region Fields
@@ -88,6 +88,9 @@ namespace DemEkzDemo.ViewModels
             set 
             {
                 genderFilterIndex = value;
+                Count = 0;
+                LoggedOut = PerPage;
+                CheckLoggedOut();
                 Connection();
                 OnPropertyChanged(nameof(GenderFilterIndex));
             }
@@ -98,6 +101,18 @@ namespace DemEkzDemo.ViewModels
         {
             get { return loggedOut; }
             set { loggedOut = value; OnPropertyChanged(nameof(LoggedOut)); }
+        }
+
+        private string filterClient;
+        public string FilterClient
+        {
+            get { return filterClient; }
+            set 
+            {
+                filterClient = value;
+                Connection();
+                OnPropertyChanged(nameof(FilterClient));
+            }
         }
 
         #endregion
@@ -117,6 +132,7 @@ namespace DemEkzDemo.ViewModels
             if (CheckConnection())
             {
                 ListClients = (from f in db.Client_Import_good
+                               where (f.Name.Contains(FilterClient) || (f.LastName.Contains(FilterClient) || f.Surname.Contains(FilterClient) || f.Email.Contains(FilterClient) || f.Phone.Contains(FilterClient)))
                                join l in db.Tags
                                  on f.TagID equals l.ID
                                  into m
@@ -266,5 +282,9 @@ namespace DemEkzDemo.ViewModels
 
         #endregion
 
+
+        #region Training
+
+        #endregion
     }
 }
