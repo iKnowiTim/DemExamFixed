@@ -28,9 +28,22 @@ namespace DemEkzDemo.ViewModels
        
         #region Fields
 
-        private readonly MainWindowViewModel mainWindowViewModel;
+        public readonly MainWindowViewModel mainWindowViewModel;
         private DemServerEntities db = new DemServerEntities();
         private bool prevPage = false;
+
+        public DemServerEntities Db
+        {
+            get
+            {
+                return db;
+            }
+            set
+            {
+                db = value;
+                OnPropertyChanged(nameof(Db));
+            }
+        }
 
         private SolidColorBrush additionallyGridBackground;
         public SolidColorBrush AdditionallyGridBackground
@@ -176,6 +189,11 @@ namespace DemEkzDemo.ViewModels
             Release50ClientsCommand = new RelayCommand(Release50Clients, x => true);
             Release200ClientsCommand = new RelayCommand(Release200Clients, x => true);
             ReleaseAllClientsCommand = new RelayCommand(ReleaseAllClients, x => true);
+            GoToAddUserPageCommand = new RelayCommand(GoToAddUserPage, x => true);
+        }
+        private void GoToAddUserPage()
+        {
+            mainWindowViewModel.SwitchPage("AddUser");
         }
         private void NextPage()
         {
@@ -218,7 +236,7 @@ namespace DemEkzDemo.ViewModels
             }
             else return LoggedOut;
         }
-        private void CountingLoggedOut() // ИСПРАВИТЬ!!!
+        private void CountingLoggedOut() // TODO: ИСПРАВИТЬ!!!
         {
             if (Size == LoggedOut && prevPage)
             {
@@ -230,7 +248,7 @@ namespace DemEkzDemo.ViewModels
             }
             CheckLoggedOut();
         } 
-        private void Release10Clients()
+        public void Release10Clients()
         {
             Count = 0;
             PerPage = 10;
@@ -262,13 +280,6 @@ namespace DemEkzDemo.ViewModels
             Connection();
             CheckLoggedOut();
         }
-        //private void CheckChangeSelectedGender() // Дописать и разобраться
-        //{
-        //    if (ValueProperty)
-        //    {
-
-        //    }
-        //}
         #endregion
 
         #region Commands
@@ -279,6 +290,7 @@ namespace DemEkzDemo.ViewModels
         public ICommand Release50ClientsCommand { get; set; }
         public ICommand Release200ClientsCommand { get; set; }
         public ICommand ReleaseAllClientsCommand { get; set; }
+        public ICommand GoToAddUserPageCommand { get; set; }
 
         #endregion
 

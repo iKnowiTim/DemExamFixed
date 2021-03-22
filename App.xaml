@@ -9,5 +9,8 @@
         <DataTemplate DataType="{x:Type viewmodel:MainMenuViewModel}">
             <view:MainMenu/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:ManagerAddUserViewModel}">
+            <view:ManagerAddUser/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

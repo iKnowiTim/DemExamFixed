@@ -19,7 +19,22 @@ namespace DemEkzDemo.ViewModels
         private void InitPages()
         {
             mainMenu = new MainMenuViewModel(this);
+            managerView = new ManagerAddUserViewModel(mainMenu);
             CurrentPage = mainMenu;
+        }
+        public void SwitchPage(string namePage)
+        {
+            switch (namePage)
+            {
+                case "Menu":
+                    CurrentPage = mainMenu;
+                    break;
+                case "AddUser":
+                    CurrentPage = managerView;
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion
@@ -28,6 +43,7 @@ namespace DemEkzDemo.ViewModels
         #region Fields
 
         private MainMenuViewModel mainMenu;
+        private ManagerAddUserViewModel managerView;
 
         private BaseViewModel currentPage;
         public BaseViewModel CurrentPage
@@ -35,9 +51,6 @@ namespace DemEkzDemo.ViewModels
             get { return currentPage; }
             set { currentPage = value; OnPropertyChanged(nameof(CurrentPage)); }
         }
-
-
-
 
         #endregion
     }

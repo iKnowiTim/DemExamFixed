@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace DemEkzDemo.ViewModels
 {
-    public class BaseViewModel : DependencyObject, INotifyPropertyChanged 
+    public class BaseViewModel : INotifyPropertyChanged 
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
