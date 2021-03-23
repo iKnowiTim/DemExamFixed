@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DemEkzDemo"
         xmlns:viewModel="clr-namespace:DemEkzDemo.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="700" Width="1100">
     <Window.DataContext>
         <viewModel:MainWindowViewModel/>
     </Window.DataContext>

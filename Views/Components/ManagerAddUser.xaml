@@ -46,8 +46,8 @@
             <TextBlock Text="DateOfBirth"
                        FontSize="20"
                        Margin="5"/>
-            <Calendar SelectedDate="{Binding DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedDatesChanged="Calendar_SelectedDatesChanged"/>
+            <DatePicker SelectedDate="{Binding DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedDateChanged="Calendar_SelectedDatesChanged"/>
             <TextBlock Text="Email"
                        FontSize="20"
                        Margin="5"/>

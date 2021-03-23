@@ -10,6 +10,7 @@
         <BooleanToVisibilityConverter x:Key="bool2vis"/>
         <BooleanToVisibilityConverter x:Key="bool2visVer2"/>
     </UserControl.Resources>
+    
     <Grid Background="{Binding AdditionallyGridBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,6 +25,8 @@
 
         <Image Source="/Images/school_logo.png" Margin="5"/>
 
+        <!--#region Список пользователей-->
+        
         <ListView ItemsSource="{Binding ListClients}"
                   Grid.Row="1"
                   Grid.Column="1"
@@ -93,7 +96,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
+        
+        <!--#endregion-->
+        
+        <!--#region Подсчет страниц-->
         <Grid Grid.Column="1"
               Background="{Binding FocusGridBackground}">
             <StackPanel HorizontalAlignment="Center"
@@ -107,6 +113,10 @@
             </StackPanel>
         </Grid>
 
+        <!--#endregion-->
+        
+        <!--#region Передвижение по страницам-->
+        
         <Grid Grid.Row="2"
               Grid.Column="1"
               Background="{Binding MainGridBackground}">
@@ -129,6 +139,10 @@
                         Command="{Binding NextPageCommand}"/>
             </StackPanel>
         </Grid>
+        
+        <!--#endregion-->
+        
+        <!--#region Фильтрация по полу и вывод кол-ва пользователей-->
         
         <Grid Grid.Column="2"
                   Grid.Row="2"
@@ -175,8 +189,14 @@
             </StackPanel>
         </Grid>
 
+        <!--#endregion-->
+        
+        <!--#region Редактор и поиск-->
+        
         <Grid Grid.Column="2"
               Grid.Row="1">
+            
+            <!--#region Поиск-->
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Visibility="{Binding FilterClientVis, Converter={StaticResource bool2vis}}">
@@ -198,14 +218,86 @@
                         Command="{Binding VisEditModeUserCommand}"/>
             </StackPanel>
 
+            <!--#endregion-->
+
+            <!--#region Редактирование-->
             <StackPanel Visibility="{Binding EditUserVis, Converter={StaticResource bool2visVer2}}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="ID:"
+                           FontSize="10"/>
+                    <TextBlock Text="{Binding SelectedItem.ID}"
+                           FontSize="10"
+                               Margin="5 0 0 5"/>
+                </StackPanel>
+                <TextBlock Text="Имя"
+                           FontSize="10"/>
                 <TextBox Width="150"
-                         Text="{Binding SelectedItem.Name}"/>
+                         Text="{Binding SelectedItem.Name}"
+                         TextChanged="TextBox_TextChanged"/>
+                <TextBlock Text="Фамилия"
+                           FontSize="10"/>
+                <TextBox Width="150"
+                         Text="{Binding SelectedItem.LastName}"
+                         TextChanged="TextBox_TextChanged"/>
+                <TextBlock Text="Отчество"
+                           FontSize="10"/>
+                <TextBox Width="150"
+                         Text="{Binding SelectedItem.Surname}"
+                         TextChanged="TextBox_TextChanged"/>
+                <TextBlock Text="Телефон"
+                           FontSize="10"/>
+                <TextBox Width="150"
+                         Text="{Binding SelectedItem.Phone}"
+                         TextChanged="TextBox_TextChanged"/>
+                <TextBlock Text="Дата рождения"
+                           FontSize="10"/>
+                <DatePicker Text="{Binding SelectedItem.DateOfBirth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Email"
+                           FontSize="10"/>
+                <TextBox Width="150"
+                         Text="{Binding SelectedItem.Email}"
+                         TextChanged="TextBox_TextChanged"/>
+                <TextBlock Text="Пол"
+                           FontSize="10"/>
+                <ComboBox Width="150"
+                         Text="{Binding SelectedItem.Gender}">
+                    <ComboBoxItem Content="Мужской"/>
+                    <ComboBoxItem Content="Женский"/>
+                </ComboBox>
+                <TextBlock Text="Фото"
+                           FontSize="10"/>
+                <Image Source="{Binding SelectedItem.ClientPhoto}"
+                       Width="50"
+                       Height="50"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="6"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="Изменить"
+                            Command="{Binding EditClientCommand}"/>
+                    <Button Margin="15 6 6 6"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="Удалить"
+                            Command="{Binding DeleteClientCommand}"/>
+                </StackPanel>
+                <Button Margin="6"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Content="Назад к поиску"
+                        Command="{Binding VisSerachClientsCommand}"/>
             </StackPanel>
+            <!--#endregion-->
+                
         </Grid>
 
+        <!--#endregion-->
+        
+        <!--#region Добавить пользователя-->
+        
         <Grid Grid.Column="2">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -219,5 +311,7 @@
                         Command="{Binding GoToAddUserPageCommand}"/>
             </StackPanel>
         </Grid>
+        
+        <!--#endregion-->
     </Grid>
 </UserControl>

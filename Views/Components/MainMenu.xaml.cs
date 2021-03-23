@@ -30,5 +30,11 @@ namespace DemEkzDemo.Views.Components
             TextBox tb = sender as TextBox;
             tb.GetBindingExpression(TextBox.TextProperty).UpdateSource();
         }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DatePicker dp = sender as DatePicker;
+            dp.GetBindingExpression(DatePicker.SelectedDateFormatProperty).UpdateSource();
+        }
     }
 }

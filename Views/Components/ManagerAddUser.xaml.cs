@@ -39,8 +39,8 @@ namespace DemEkzDemo.Views.Components
 
         private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
-            Calendar cl = sender as Calendar;
-            cl.GetBindingExpression(Calendar.SelectedDateProperty).UpdateSource();
+            DatePicker cl = sender as DatePicker;
+            cl.GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace DemEkzDemo.ViewModels
             Connection();
             InitCommands();
         }
-       
+
         #region Fields
 
         public readonly MainWindowViewModel mainWindowViewModel;
@@ -100,7 +100,7 @@ namespace DemEkzDemo.ViewModels
         public int GenderFilterIndex
         {
             get { return genderFilterIndex; }
-            set 
+            set
             {
                 genderFilterIndex = value;
                 Count = 0;
@@ -122,7 +122,7 @@ namespace DemEkzDemo.ViewModels
         public string FilterClient
         {
             get { return filterClient; }
-            set 
+            set
             {
                 filterClient = value;
                 Connection();
@@ -148,10 +148,10 @@ namespace DemEkzDemo.ViewModels
         public Model.Client SelectedItem
         {
             get { return selectedItem; }
-            set 
+            set
             {
                 selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem)); 
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -159,13 +159,12 @@ namespace DemEkzDemo.ViewModels
         public string ClientPhoto
         {
             get { return clientPhoto; }
-            set 
+            set
             {
                 clientPhoto = value;
                 OnPropertyChanged(nameof(ClientPhoto));
             }
         }
-
 
         #endregion
 
@@ -184,28 +183,28 @@ namespace DemEkzDemo.ViewModels
             if (CheckConnection())
             {
                 ListClients = new ObservableCollection<Model.Client>((from f in db.Client_Import_good
-                               where (f.Name.Contains(FilterClient) || (f.LastName.Contains(FilterClient) || f.Surname.Contains(FilterClient) || f.Email.Contains(FilterClient) || f.Phone.Contains(FilterClient)))
-                               join l in db.Tags
-                                 on f.TagID equals l.ID
-                                 into m
-                               join gen in db.Genders
-                               on f.Gender equals gen.Code
-                               from mo in m.DefaultIfEmpty()
-                               orderby f.ID
-                               select new DemEkzDemo.Model.Client
-                               {
-                                   Name = f.Name,
-                                   ID = f.ID,
-                                   Surname = f.Surname,
-                                   DateOfBirth = f.DateOfBirth,
-                                   Gender = gen.Name,
-                                   Email = f.Email,
-                                   Phone = f.Phone,
-                                   LastName = f.LastName,
-                                   Tags = mo.Title,
-                                   RegistrationDate = f.RegistrationDate,
-                                   ClientPhoto = "/" + f.ClientPhoto
-                               }
+                                                                      where (f.Name.Contains(FilterClient) || (f.LastName.Contains(FilterClient) || f.Surname.Contains(FilterClient) || f.Email.Contains(FilterClient) || f.Phone.Contains(FilterClient)))
+                                                                      join l in db.Tags
+                                                                        on f.TagID equals l.ID
+                                                                        into m
+                                                                      join gen in db.Genders
+                                                                      on f.Gender equals gen.Code
+                                                                      from mo in m.DefaultIfEmpty()
+                                                                      orderby f.ID
+                                                                      select new DemEkzDemo.Model.Client
+                                                                      {
+                                                                          Name = f.Name,
+                                                                          ID = f.ID,
+                                                                          Surname = f.Surname,
+                                                                          DateOfBirth = f.DateOfBirth,
+                                                                          Gender = gen.Name,
+                                                                          Email = f.Email,
+                                                                          Phone = f.Phone,
+                                                                          LastName = f.LastName,
+                                                                          Tags = mo.Title,
+                                                                          RegistrationDate = f.RegistrationDate,
+                                                                          ClientPhoto = "/" + f.ClientPhoto
+                                                                      }
                            ).Where(gen => GenderFilterIndex > 0 ? (gen.Gender == "Мужской" && genderFilterIndex == 1) || (gen.Gender == "Женский" && genderFilterIndex == 2) : true)
                            .Skip(Count * PerPage).Take(PerPage).ToList());
                 Size = db.Client_Import_good.Where(gen => GenderFilterIndex > 0 ? (gen.Gender == "м" && genderFilterIndex == 1) || (gen.Gender == "ж" && genderFilterIndex == 2) : true).Count();
@@ -230,6 +229,54 @@ namespace DemEkzDemo.ViewModels
             ReleaseAllClientsCommand = new RelayCommand(ReleaseAllClients, x => true);
             GoToAddUserPageCommand = new RelayCommand(GoToAddUserPage, x => true);
             VisEditModeUserCommand = new RelayCommand(VisEditModeUser, x => true);
+            VisSerachClientsCommand = new RelayCommand(VisSerachClients, x => true);
+            DeleteClientCommand = new RelayCommand(DeleteClient, x => SelectedItem != null);
+            EditClientCommand = new RelayCommand(EditClient, CanExecuteEditClient);
+        }
+        private bool CanExecuteEditClient(object arg)
+        {
+            return SelectedItem != null && SelectedItem.Name.Length > 0 && SelectedItem.Name.Length < 50 && SelectedItem.LastName.Length > 0 &&
+                SelectedItem.LastName.Length < 50 && SelectedItem.Surname.Length > 0 && SelectedItem.Surname.Length < 50
+                && SelectedItem.Email.Contains("@");
+        }
+        private void EditClient()
+        {
+            var client = Db.Client_Import_good.Where(a => a.ID == SelectedItem.ID)
+                .FirstOrDefault();
+            client.Name = SelectedItem.Name;
+            client.LastName = SelectedItem.LastName;
+            client.Surname = SelectedItem.Surname;
+            client.Phone = SelectedItem.Phone;
+            client.DateOfBirth = SelectedItem.DateOfBirth;
+            client.Email = SelectedItem.Email;
+            if (SelectedItem.Gender == "Женский")
+            {
+                client.Gender = "ж";
+            }
+            else
+            {
+                client.Gender = "м";
+            }
+
+            Db.SaveChanges();
+            Connection();
+            SelectedItem = null;
+            MessageBox.Show("Успешно изменено");
+        }
+        private void DeleteClient()
+        {
+            var client = db.Client_Import_good
+                .Where(a => a.ID == SelectedItem.ID)
+                .FirstOrDefault();
+            db.Client_Import_good.Remove(client);
+            db.SaveChanges();
+            Connection();
+            MessageBox.Show("Клиент удален");
+        }
+        private void VisSerachClients()
+        {
+            EditUserVis = false;
+            FilterClientVis = true;
         }
         private void VisEditModeUser()
         {
@@ -292,7 +339,7 @@ namespace DemEkzDemo.ViewModels
                 LoggedOut -= PerPage;
             }
             CheckLoggedOut();
-        } 
+        }
         public void Release10Clients()
         {
             Count = 0;
@@ -325,6 +372,7 @@ namespace DemEkzDemo.ViewModels
             Connection();
             CheckLoggedOut();
         }
+
         #endregion
 
         #region Commands
@@ -337,6 +385,9 @@ namespace DemEkzDemo.ViewModels
         public ICommand ReleaseAllClientsCommand { get; set; }
         public ICommand GoToAddUserPageCommand { get; set; }
         public ICommand VisEditModeUserCommand { get; set; }
+        public ICommand VisSerachClientsCommand {get;set;}
+        public ICommand DeleteClientCommand { get; set; }
+        public ICommand EditClientCommand { get; set; }
 
         #endregion
 
