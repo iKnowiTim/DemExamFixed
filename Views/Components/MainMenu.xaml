@@ -6,6 +6,10 @@
              xmlns:local="clr-namespace:DemEkzDemo.Views.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2vis"/>
+        <BooleanToVisibilityConverter x:Key="bool2visVer2"/>
+    </UserControl.Resources>
     <Grid Background="{Binding AdditionallyGridBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -22,11 +26,13 @@
 
         <ListView ItemsSource="{Binding ListClients}"
                   Grid.Row="1"
-                  Grid.Column="1">
+                  Grid.Column="1"
+                  SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
@@ -41,7 +47,7 @@
                             <TextBlock Text="{Binding ID}"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Margin="5">
                             <TextBlock Text="ФИО"/>
                             <TextBlock Text="{Binding Name}"/>
@@ -49,32 +55,39 @@
                             <TextBlock Text="{Binding Surname}"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical"
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Margin="5">
                             <TextBlock Text="Дата рождения"/>
                             <TextBlock Text="{Binding DateOfBirth}" Margin="0 0 0 5"/>
                             <TextBlock Text="Дата регистрации"/>
                             <TextBlock Text="{Binding RegistrationDate}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="3"
+                        <StackPanel Grid.Column="4"
                                     Margin="5">
                             <TextBlock Text="Пол"/>
                             <TextBlock Text="{Binding Gender}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="4"
+                        <StackPanel Grid.Column="5"
                                     Margin="5">
                             <TextBlock Text="Номер телефона"/>
                             <TextBlock Text="{Binding Phone}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="5"
+                        <StackPanel Grid.Column="6"
                                     Margin="5">
                             <TextBlock Text="Почта"/>
                             <TextBlock Text="{Binding Email}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="6"
+                        <StackPanel Grid.Column="7"
                                     Margin="5">
                             <TextBlock Text="Тег"/>
                             <TextBlock Text="{Binding Tags}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Margin="5">
+                            <Image Source="{Binding ClientPhoto}"
+                                   Margin="5"
+                                   Width="100"
+                                   Height="100"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
@@ -166,15 +179,31 @@
               Grid.Row="1">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Background="{Binding FocusGridBackground}">
+                        Visibility="{Binding FilterClientVis, Converter={StaticResource bool2vis}}">
                 <TextBlock Text="Поиск" Margin="5"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center"
+                           Background="{Binding FocusGridBackground}"/>
                 <TextBox Text="{Binding FilterClient, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                      TextChanged="TextBox_TextChanged"
                      Width="150"/>
+                <Button Margin="0 25 0 0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="150"
+                        Height="40"
+                        Content="Редактировать"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding VisEditModeUserCommand}"/>
             </StackPanel>
-            
+
+            <StackPanel Visibility="{Binding EditUserVis, Converter={StaticResource bool2visVer2}}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <TextBox Width="150"
+                         Text="{Binding SelectedItem.Name}"/>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Column="2">

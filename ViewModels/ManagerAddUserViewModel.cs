@@ -40,7 +40,7 @@ namespace DemEkzDemo.ViewModels
                 LastName = LastName,
                 Surname = Surname,
                 Gender = GenderCheck(),
-                ClientPhoto = "",
+                ClientPhoto = "Клиенты/44.jpg",
                 DateOfBirth = DateOfBirth,
                 RegistrationDate = DateTime.Now,
                 Email = Email,

@@ -12,6 +12,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using DemEkzDemo.ModelDb;
+using DemEkzDemo.Model;
+using System.Collections.ObjectModel;
 
 namespace DemEkzDemo.ViewModels
 {
@@ -87,8 +89,8 @@ namespace DemEkzDemo.ViewModels
             set { count = value; OnPropertyChanged(nameof(Count)); }
         }
 
-        private IEnumerable listClients;
-        public IEnumerable ListClients
+        private ObservableCollection<DemEkzDemo.Model.Client> listClients;
+        public ObservableCollection<DemEkzDemo.Model.Client> ListClients
         {
             get { return listClients; }
             set { listClients = value; OnPropertyChanged(nameof(ListClients)); }
@@ -128,6 +130,43 @@ namespace DemEkzDemo.ViewModels
             }
         }
 
+        private bool filterClientVis = true;
+        public bool FilterClientVis
+        {
+            get { return filterClientVis; }
+            set { filterClientVis = value; OnPropertyChanged(nameof(FilterClientVis)); }
+        }
+
+        private bool editUserVis = false;
+        public bool EditUserVis
+        {
+            get { return editUserVis; }
+            set { editUserVis = value; OnPropertyChanged(nameof(EditUserVis)); }
+        }
+
+        private Model.Client selectedItem;
+        public Model.Client SelectedItem
+        {
+            get { return selectedItem; }
+            set 
+            {
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem)); 
+            }
+        }
+
+        private string clientPhoto;
+        public string ClientPhoto
+        {
+            get { return clientPhoto; }
+            set 
+            {
+                clientPhoto = value;
+                OnPropertyChanged(nameof(ClientPhoto));
+            }
+        }
+
+
         #endregion
 
         #region Methods
@@ -144,7 +183,7 @@ namespace DemEkzDemo.ViewModels
         {
             if (CheckConnection())
             {
-                ListClients = (from f in db.Client_Import_good
+                ListClients = new ObservableCollection<Model.Client>((from f in db.Client_Import_good
                                where (f.Name.Contains(FilterClient) || (f.LastName.Contains(FilterClient) || f.Surname.Contains(FilterClient) || f.Email.Contains(FilterClient) || f.Phone.Contains(FilterClient)))
                                join l in db.Tags
                                  on f.TagID equals l.ID
@@ -153,7 +192,7 @@ namespace DemEkzDemo.ViewModels
                                on f.Gender equals gen.Code
                                from mo in m.DefaultIfEmpty()
                                orderby f.ID
-                               select new
+                               select new DemEkzDemo.Model.Client
                                {
                                    Name = f.Name,
                                    ID = f.ID,
@@ -164,11 +203,11 @@ namespace DemEkzDemo.ViewModels
                                    Phone = f.Phone,
                                    LastName = f.LastName,
                                    Tags = mo.Title,
-                                   RegistrationDate = f.RegistrationDate
+                                   RegistrationDate = f.RegistrationDate,
+                                   ClientPhoto = "/" + f.ClientPhoto
                                }
                            ).Where(gen => GenderFilterIndex > 0 ? (gen.Gender == "Мужской" && genderFilterIndex == 1) || (gen.Gender == "Женский" && genderFilterIndex == 2) : true)
-                           .Skip(Count * PerPage).Take(PerPage)
-                           .ToList();
+                           .Skip(Count * PerPage).Take(PerPage).ToList());
                 Size = db.Client_Import_good.Where(gen => GenderFilterIndex > 0 ? (gen.Gender == "м" && genderFilterIndex == 1) || (gen.Gender == "ж" && genderFilterIndex == 2) : true).Count();
             } else
             {
@@ -190,6 +229,12 @@ namespace DemEkzDemo.ViewModels
             Release200ClientsCommand = new RelayCommand(Release200Clients, x => true);
             ReleaseAllClientsCommand = new RelayCommand(ReleaseAllClients, x => true);
             GoToAddUserPageCommand = new RelayCommand(GoToAddUserPage, x => true);
+            VisEditModeUserCommand = new RelayCommand(VisEditModeUser, x => true);
+        }
+        private void VisEditModeUser()
+        {
+            EditUserVis = true;
+            FilterClientVis = false;
         }
         private void GoToAddUserPage()
         {
@@ -291,6 +336,7 @@ namespace DemEkzDemo.ViewModels
         public ICommand Release200ClientsCommand { get; set; }
         public ICommand ReleaseAllClientsCommand { get; set; }
         public ICommand GoToAddUserPageCommand { get; set; }
+        public ICommand VisEditModeUserCommand { get; set; }
 
         #endregion
 
