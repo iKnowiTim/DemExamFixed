@@ -123,6 +123,16 @@ namespace DemEkzDemo.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _1458574470139337099 {
+            get {
+                object obj = ResourceManager.GetObject("_1458574470139337099", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _15 {
             get {
                 object obj = ResourceManager.GetObject("_15", resourceCulture);
@@ -276,6 +286,16 @@ namespace DemEkzDemo.Properties {
         internal static System.Drawing.Bitmap _29 {
             get {
                 object obj = ResourceManager.GetObject("_29", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _2P5x {
+            get {
+                object obj = ResourceManager.GetObject("_2P5x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

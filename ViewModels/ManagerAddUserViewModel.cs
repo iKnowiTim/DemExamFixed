@@ -7,6 +7,10 @@ using System.Windows;
 using DemEkzDemo.ModelDb;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Win32;
+using System.IO;
+using System.Drawing;
+using System.Reflection;
 
 namespace DemEkzDemo.ViewModels
 {
@@ -26,6 +30,58 @@ namespace DemEkzDemo.ViewModels
         {
             GoToMainMenuCommand = new RelayCommand(GoToMainMenu, x => true);
             AddUserCommand = new RelayCommand(AddUser, CanExecuteAddUser);
+            DownloadImageCommand = new RelayCommand(DownloadImage, x => true);
+        }
+        private void DownloadImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "Image(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF";
+            
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ImagePath = openFileDialog.FileName;
+                nameFile = GetImageName(ImagePath);
+                CopyImage(endPath);
+                allPathImageForDb = "Клиенты" + nameFile;
+            }
+        }
+        private string GetImageName(string imagePath)
+        {
+            int allCount = imagePath.Length;
+            var difChar = ' ';
+            int size = 0;
+            int i = allCount - 1;
+
+            while (difChar != '\\')
+            {
+                difChar = imagePath[i];
+                size++;
+                i--;
+            }
+
+            char[] word = new char[size];
+
+            difChar = ' ';
+            int j = imagePath.Length - 1;
+            int c = 0;
+            while (difChar != '\\')
+            {
+                difChar = imagePath[j];
+                word[c] = imagePath[j];
+                c++;
+                j--;
+            }
+            Array.Reverse(word);
+            return new string(word);
+        }
+        private void CopyImage(string endPath)
+        {
+            if (File.Exists(endPath + "\\" + nameFile))
+            {
+                return;
+            } else
+            File.Copy(ImagePath, endPath + "\\" + nameFile);
         }
         private bool CanExecuteAddUser(object arg)
         {
@@ -34,18 +90,21 @@ namespace DemEkzDemo.ViewModels
         }
         private void AddUser()
         {
+            string name = endPath + "\\" + nameFile;
             Client_Import_good client = new Client_Import_good()
             {
                 Name = Name,
                 LastName = LastName,
                 Surname = Surname,
                 Gender = GenderCheck(),
-                ClientPhoto = "Клиенты/44.jpg",
+                //ClientPhoto = allPathImageForDb,
+                ClientPhoto = ImagePath,
                 DateOfBirth = DateOfBirth,
                 RegistrationDate = DateTime.Now,
                 Email = Email,
                 Phone = Phone                
             };
+           
 
             mainMenuViewModel.Db.Client_Import_good.Add(client);
             mainMenuViewModel.Db.SaveChanges();
@@ -70,6 +129,9 @@ namespace DemEkzDemo.ViewModels
         #endregion
 
         #region Fields
+        private string nameFile;
+        private string allPathImageForDb;
+        private string endPath = "C:\\Users\\tamir\\source\\repos\\DemEkzDemo\\Клиенты";
 
         private string name = "fsdfsdf";
         public string Name
@@ -106,7 +168,7 @@ namespace DemEkzDemo.ViewModels
             set { phone = value; OnPropertyChanged(nameof(Phone)); }
         }
 
-        private string email = "asdasd";
+        private string email = "asdasd@mail.ru";
         public string Email
         {
             get { return email; }
@@ -120,7 +182,13 @@ namespace DemEkzDemo.ViewModels
             set { dateOfBirth = value; OnPropertyChanged(nameof(DateOfBirth)); }
         }
 
-        public SolidColorBrush AdditionallyGridBackground;
+        private string imagePath = "/Клиенты/1.jpg";
+        public string ImagePath
+        {
+            get { return imagePath; }
+            set { imagePath = value; OnPropertyChanged(nameof(ImagePath)); }
+        }
+
 
         #endregion
 
@@ -128,6 +196,7 @@ namespace DemEkzDemo.ViewModels
 
         public ICommand GoToMainMenuCommand { get; set; }
         public ICommand AddUserCommand { get; set; }
+        public ICommand DownloadImageCommand { get; set; }
 
         #endregion
     }

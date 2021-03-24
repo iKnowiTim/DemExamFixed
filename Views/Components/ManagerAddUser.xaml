@@ -38,6 +38,18 @@
                      Margin="5"
                      Text="{Binding Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      TextChanged="TextBox_TextChanged"/>
+            <Image Margin="15"
+                   Width="100"
+                   Height="100"
+                   Source="{Binding ImagePath}"/>
+            <Button HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="150"
+                    Height="25"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Content="Выбрать картинку"
+                    Command="{Binding DownloadImageCommand}"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Center"

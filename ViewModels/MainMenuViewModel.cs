@@ -203,7 +203,7 @@ namespace DemEkzDemo.ViewModels
                                                                           LastName = f.LastName,
                                                                           Tags = mo.Title,
                                                                           RegistrationDate = f.RegistrationDate,
-                                                                          ClientPhoto = "/" + f.ClientPhoto
+                                                                          ClientPhoto = f.ClientPhoto
                                                                       }
                            ).Where(gen => GenderFilterIndex > 0 ? (gen.Gender == "Мужской" && genderFilterIndex == 1) || (gen.Gender == "Женский" && genderFilterIndex == 2) : true)
                            .Skip(Count * PerPage).Take(PerPage).ToList());

@@ -200,6 +200,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="Клиенты\1458574470139337099.jpg" />
+    <Resource Include="Клиенты\2P5x.gif" />
     <Resource Include="Клиенты\8.jpg" />
     <Resource Include="Клиенты\7.jpg" />
     <Resource Include="Клиенты\6.jpg" />
